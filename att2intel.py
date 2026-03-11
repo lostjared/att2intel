@@ -162,6 +162,10 @@ def _base_and_suffix(op):
         'movabs',
         'lzcnt', 'tzcnt', 'popcnt',
         'in', 'out',
+        # SSE/AVX scalar conversion with integer size suffix
+        'cvtsi2ss', 'cvtsi2sd',
+        'cvttss2si', 'cvttsd2si',
+        'cvtss2si', 'cvtsd2si',
     ]:
         for sfx, ptr in SUFFIX_TO_PTR.items():
             SUFFIX_MAP[base + sfx] = (base, ptr)
@@ -372,9 +376,10 @@ def convert_line(line):
 
     if len(ops) == 2:
         src, dst = ops
-        # For movzx/movsx/movsxd, source size PTR is always required on memory
-        # operands because the source and dest are different sizes
-        if ptr and op2 in ('movzx', 'movsx', 'movsxd') and operand_needs_ptr(src):
+        # For instructions where source and dest are different sizes,
+        # source size PTR is always required on memory operands
+        if ptr and op2 in ('movzx', 'movsx', 'movsxd',
+                           'cvtsi2ss', 'cvtsi2sd') and operand_needs_ptr(src):
             src = f'{ptr} {src}'
         # Add PTR if memory operand and size would be ambiguous
         elif ptr and operand_needs_ptr(dst) and not is_register(src):
