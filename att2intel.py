@@ -249,9 +249,10 @@ def convert_operand(operand):
             else:
                 bracket_parts.append(index)
         if disp:
-            # For rip-relative, always use "rip + symbol"
+            # For rip-relative, use symbol[rip] format (matches GCC -masm=intel output)
+            # This avoids conflicts with GAS Intel-syntax reserved keywords like OFFSET
             if base == 'rip':
-                return f'[rip + {disp}]'
+                return f'{disp}[rip]'
             # Numeric displacement
             if _is_numeric(disp):
                 num = int(disp, 0)
@@ -371,8 +372,12 @@ def convert_line(line):
 
     if len(ops) == 2:
         src, dst = ops
+        # For movzx/movsx/movsxd, source size PTR is always required on memory
+        # operands because the source and dest are different sizes
+        if ptr and op2 in ('movzx', 'movsx', 'movsxd') and operand_needs_ptr(src):
+            src = f'{ptr} {src}'
         # Add PTR if memory operand and size would be ambiguous
-        if ptr and operand_needs_ptr(dst) and not is_register(src):
+        elif ptr and operand_needs_ptr(dst) and not is_register(src):
             dst = f'{ptr} {dst}'
         elif ptr and operand_needs_ptr(src) and not is_register(dst):
             src = f'{ptr} {src}'
