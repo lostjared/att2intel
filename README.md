@@ -6,6 +6,12 @@ A Python command-line tool that converts x86/x86-64 GNU assembly (`.s`) files fr
 
 AT&T and Intel are two different syntaxes for writing x86 assembly. They differ in operand order, register/immediate prefixes, and memory operand formatting. This script automates the conversion so you don't have to rewrite files by hand.
 
+Example Project converted with this tool:
+
+https://github.com/lostjared/MasterPiece.x64.Assembly
+
+
+
 ### Conversions performed
 
 | Feature | AT&T (input) | Intel (output) |
