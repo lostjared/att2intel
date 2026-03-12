@@ -1,6 +1,6 @@
 # att2intel
 
-A Python command-line tool that converts x86/x86-64 GNU assembly (`.s`) files from **AT&T syntax** to **Intel syntax** (GAS `.intel_syntax noprefix` style).
+This project is a generated Python command-line tool that converts x86/x86-64 GNU assembly (`.s`) files from **AT&T syntax** to **Intel syntax** (GAS `.intel_syntax noprefix` style).
 
 ## What It Does
 
