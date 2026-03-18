@@ -411,7 +411,7 @@ def convert_text(text):
 
 def main():
     if len(sys.argv) < 2:
-        print("usage: python3 convert.py <src_dir> [output_dir]")
+        print("usage: python3 att2intel.py <src_dir> [output_dir]")
         sys.exit(1)
 
     src_path = Path(sys.argv[1])
